@@ -1,0 +1,32 @@
+version: '3'
+
+networks:
+  impacta:
+    ipam:
+      config:
+        - subnet: 172.16.0.0/24
+
+services:
+  c-mysql:
+    image: mysql:latest
+    restart: always
+    ports:
+      - 53306:3306
+    networks:
+      impacta:
+        ipv4_address: 172.16.0.11
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=impacta
+      - MYSQL_TCP_PORT=3306
+
+  c-nginx:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      impacta:
+        ipv4_address: 172.16.0.12
+    ports:
+      - 80:80
